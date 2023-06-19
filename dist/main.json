@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.18.4.5664",
-      "templateHash": "15800438390835177975"
+      "templateHash": "4831632794405718150"
     }
   },
   "parameters": {
@@ -21,6 +21,12 @@
     "logAnalyticsWorkspaceParams": {
       "type": "object"
     },
+    "dceParams": {
+      "type": "object"
+    },
+    "brandTags": {
+      "type": "object"
+    },
     "vnetParams": {
       "type": "object"
     },
@@ -31,12 +37,6 @@
       "type": "object"
     },
     "cosmosDbParams": {
-      "type": "object"
-    },
-    "dceParams": {
-      "type": "object"
-    },
-    "brandTags": {
       "type": "object"
     },
     "dateNow": {
@@ -2654,99 +2654,6 @@
       ],
       "metadata": {
         "description": "Add Permissions to UAMI"
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2022-09-01",
-      "name": "[format('lumberyard_mill_{0}_cs', parameters('deploymentParams').global_uniqueness)]",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "deploymentParams": {
-            "value": "[parameters('deploymentParams')]"
-          },
-          "uami_name_akane": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', format('{0}_{1}_{2}_uami', parameters('deploymentParams').enterprise_name_suffix, parameters('deploymentParams').loc_short_code, parameters('deploymentParams').global_uniqueness)), '2022-09-01').outputs.uami_name_akane.value]"
-          },
-          "tags": {
-            "value": "[parameters('tags')]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.18.4.5664",
-              "templateHash": "15554589064352333192"
-            }
-          },
-          "parameters": {
-            "module_metadata": {
-              "type": "object",
-              "defaultValue": {
-                "module_last_updated": "2023-06-14",
-                "owner": "miztiik@github"
-              }
-            },
-            "deploymentParams": {
-              "type": "object"
-            },
-            "uami_name_akane": {
-              "type": "string"
-            },
-            "tags": {
-              "type": "object"
-            }
-          },
-          "variables": {
-            "cognitive_search_name": "[replace(format('{0}-{1}-search-{2}', parameters('deploymentParams').enterprise_name_suffix, parameters('deploymentParams').loc_short_code, parameters('deploymentParams').global_uniqueness), '_', '-')]"
-          },
-          "resources": [
-            {
-              "type": "Microsoft.Search/searchServices",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[variables('cognitive_search_name')]",
-              "location": "[parameters('deploymentParams').location]",
-              "tags": "[parameters('tags')]",
-              "sku": {
-                "name": "basic"
-              },
-              "identity": {
-                "type": "UserAssigned",
-                "userAssignedIdentities": {
-                  "[format('{0}', resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('uami_name_akane')))]": {}
-                }
-              },
-              "properties": {
-                "replicaCount": 1,
-                "partitionCount": 1,
-                "hostingMode": "default"
-              }
-            }
-          ],
-          "outputs": {
-            "module_metadata": {
-              "type": "object",
-              "value": "[parameters('module_metadata')]"
-            },
-            "name": {
-              "type": "string",
-              "value": "[variables('cognitive_search_name')]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', format('{0}_{1}_{2}_uami', parameters('deploymentParams').enterprise_name_suffix, parameters('deploymentParams').loc_short_code, parameters('deploymentParams').global_uniqueness))]"
-      ],
-      "metadata": {
-        "description": "Deploy Cognitive Search"
       }
     }
   ]

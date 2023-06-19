@@ -7,17 +7,16 @@ param deploymentParams object
 param identityParams object
 
 param storageAccountParams object
-param logAnalyticsWorkspaceParams object
 
+param logAnalyticsWorkspaceParams object
+param dceParams object
+param brandTags object
 
 param vnetParams object
 param vmParams object
 
 param funcParams object
 param cosmosDbParams object
-
-param dceParams object
-param brandTags object
 
 param dateNow string = utcNow('yyyy-MM-dd-hh-mm')
 
@@ -225,19 +224,4 @@ module r_add_perms_to_uami 'modules/identity/assign_perms_to_uami.bicep' ={
     r_fn_app
   ]
 }
-
-@description('Deploy Cognitive Search')
-module r_cognitive_search 'modules/ai_ml/create_cognitive_search.bicep' = {
-  name: 'lumberyard_mill_${deploymentParams.global_uniqueness}_cs'
-  params: {
-    deploymentParams:deploymentParams
-    uami_name_akane: r_uami.outputs.uami_name_akane
-    tags: tags
-  }
-  dependsOn: [
-    r_uami
-  ]
-}
-
-
 
